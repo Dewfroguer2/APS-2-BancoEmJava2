@@ -46,9 +46,17 @@ public class ContaCorrenteService {
     public contaDTO buscaContaPorCliente(String cpf){
         ContaCorrente conta = ListaDeContas.get(cpf);
         if (conta == null){
-            throw  new RuntimeException(("Conta não encontrada para o CPF" + cpf));
+            throw  new RuntimeException("Conta não encontrada para o CPF" + cpf);
         }
         return new contaDTO(conta.getAgencia(), conta.getNumero(), conta.getCliente().getCPF());
+    }
+
+    public ContaCorrente buscaConta(String cpf){
+        ContaCorrente conta = ListaDeContas.get(cpf);
+        if (conta == null){
+            throw new RuntimeException("Conta não encontrada para o CPF" + cpf);
+        }
+        return conta;
     }
 
     public void excluiConta(String cpf){ ListaDeContas.remove(cpf); }

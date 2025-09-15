@@ -17,6 +17,8 @@ public class Cliente {
     @JsonIgnore
     private ContaCorrente Conta;
 
+    public Cliente(){}
+
     public Cliente(String cpf, String nome, LocalDate dataNascimento, Float salario){
         this.CPF = cpf;
         this.Nome = nome;

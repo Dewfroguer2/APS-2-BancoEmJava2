@@ -14,6 +14,8 @@ public class ContaCorrente {
     private ArrayList<Cartao> Cartoes = new ArrayList<>();
   //  private  ArrayList<Movimentacao> Movimentacaos = new ArrayList<>();
 
+    public ContaCorrente(){}
+
     public ContaCorrente(String agencia, String numero, Float saldo, Float limite){
         this.Agencia = agencia;
         this.Numero = numero;
