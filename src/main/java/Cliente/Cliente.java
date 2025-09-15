@@ -1,6 +1,8 @@
 package Cliente;
 
 import ContaCorrente.ContaCorrente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
@@ -10,8 +12,10 @@ public class Cliente {
     private  String Nome;
     private LocalDate DataNascimento;
     private Float Salario;
-    //private ContaCorrente Conta;
     private String emailCriado;
+
+    @JsonIgnore
+    private ContaCorrente Conta;
 
     public Cliente(String cpf, String nome, LocalDate dataNascimento, Float salario){
         this.CPF = cpf;
@@ -40,9 +44,9 @@ public class Cliente {
 
     public void setCPF(String CPF) { this.CPF = CPF; }
 
-    //public ContaCorrente getConta() { return Conta; }
+    public ContaCorrente getConta() { return Conta; }
 
-    //public void setConta(ContaCorrente conta) { Conta = conta; }
+    public void setConta(ContaCorrente conta) { Conta = conta; }
 
 
 
