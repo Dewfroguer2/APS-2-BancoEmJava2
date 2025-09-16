@@ -1,16 +1,19 @@
 package APS_2.APS_2_ArqObj.ContaCorrente;
 
 import APS_2.APS_2_ArqObj.Autenticacao.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/APS_2/APS_2_ArqObj/ContaCorrente")
+@RequestMapping("/ContaCorrente")
 public class ContaCorrenteController {
 
+    @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
     private ContaCorrenteService contaCorrenteService;
 
     @GetMapping
@@ -38,13 +41,13 @@ public class ContaCorrenteController {
         contaCorrenteService.excluiConta(cpf );
     }
 
-    @PutMapping("/{cpf}/deposito")
+    @PutMapping("/{cpf}/Deposito")
     public void deposito(@PathVariable String cpf, @RequestBody Integer valor,  @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
         contaCorrenteService.deposito(valor, cpf);
     }
 
-    @PutMapping("/{cpf}/saque")
+    @PutMapping("/{cpf}/Saque")
     public void saque(@PathVariable String cpf, @RequestBody Integer valor, @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
         contaCorrenteService.saque(valor, cpf);

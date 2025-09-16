@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/APS_2/APS_2_ArqObj/Cliente")
+@RequestMapping("/Cliente")
 public class ClienteController {
 
     @Autowired

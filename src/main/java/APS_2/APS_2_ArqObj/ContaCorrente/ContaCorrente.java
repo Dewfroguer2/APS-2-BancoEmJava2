@@ -14,7 +14,6 @@ public class ContaCorrente {
         private Float saldo;
         private Float limite;
 
-        @JsonIgnore
         private Cliente cliente;
         private ArrayList<Cartao> cartoes = new ArrayList<>();
         private final ArrayList<Movimentacao> movimentacoes = new ArrayList<>();
