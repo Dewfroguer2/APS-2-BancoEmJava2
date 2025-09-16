@@ -1,18 +1,23 @@
-package ContaCorrente;
+package APS_2.APS_2_ArqObj.ContaCorrente;
 
-import Cartao.Cartao;
-import Cliente.Cliente;
+import APS_2.APS_2_ArqObj.Cartao.Cartao;
+import APS_2.APS_2_ArqObj.Cliente.Cliente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class ContaCorrente {
     private String Agencia;
     private String Numero;
     private  Float Saldo;
     private  Float Limite;
+
+    @JsonIgnore
     private Cliente Cliente;
     private ArrayList<Cartao> Cartoes = new ArrayList<>();
-  //  private  ArrayList<Movimentacao> Movimentacaos = new ArrayList<>();
+    private  ArrayList<Movimentacao> Movimentacoes = new ArrayList<>();
 
     public ContaCorrente(){}
 
@@ -33,7 +38,6 @@ public class ContaCorrente {
 
     public Float getLimite() { return Limite; }
 
-    public void setLimite(Float limite) { Limite = limite; }
 
     public String getNumero() { return Numero; }
 
@@ -41,9 +45,13 @@ public class ContaCorrente {
 
     public Float getSaldo() { return Saldo; }
 
-    public void setSaldo(Float saldo) { Saldo = saldo; }
-
     public Cliente getCliente() { return Cliente; }
 
     public void setCliente(Cliente cliente) { Cliente = cliente; }
+
+    public void deposito(Integer valor){ Saldo += valor; Movimentacoes.add( new Movimentacao("Deposito", valor, LocalDate.now())); }
+
+    public void saque(Integer valor){ Saldo -= valor; Movimentacoes.add(new Movimentacao("Saque", valor, LocalDate.now()));}
+
+    public Collection<Movimentacao> movimentacao(){ return Movimentacoes; }
 }

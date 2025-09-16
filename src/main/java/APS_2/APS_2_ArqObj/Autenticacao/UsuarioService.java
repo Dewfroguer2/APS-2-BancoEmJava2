@@ -1,4 +1,4 @@
-package Autenticacao;
+package APS_2.APS_2_ArqObj.Autenticacao;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
-package Cartao;
+package APS_2.APS_2_ArqObj.Cartao;
 
-import ContaCorrente.ContaCorrente;
+import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrente;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.lang.management.ThreadInfo;
 import java.time.LocalDate;
 
 public class Cartao {
@@ -10,6 +10,8 @@ public class Cartao {
     private String Tipo;
     private String Status;
     private LocalDate Validade;
+
+    @JsonIgnore
     private ContaCorrente contaCorrente;
 
     public Cartao(){}

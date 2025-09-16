@@ -1,8 +1,7 @@
-package Cliente;
+package APS_2.APS_2_ArqObj.Cliente;
 
-import ContaCorrente.ContaCorrente;
+import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 

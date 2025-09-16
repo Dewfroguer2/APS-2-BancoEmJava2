@@ -1,4 +1,4 @@
-package Autenticacao;
+package APS_2.APS_2_ArqObj.Autenticacao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

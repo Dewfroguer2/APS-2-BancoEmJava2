@@ -1,7 +1,7 @@
-package ContaCorrente;
+package APS_2.APS_2_ArqObj.ContaCorrente;
 
-import Cliente.Cliente;
-import Cliente.ClienteService;
+import APS_2.APS_2_ArqObj.Cliente.Cliente;
+import APS_2.APS_2_ArqObj.Cliente.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class ContaCorrenteService {
@@ -63,4 +62,16 @@ public class ContaCorrenteService {
 
     public void atualizaConta(String cpf, ContaCorrente conta){ ListaDeContas.replace(cpf, conta); }
 
+    public void deposito(Integer valor, String cpf){ ListaDeContas.get(cpf).deposito(valor); }
+
+    public void saque(Integer valor, String cpf){
+        ContaCorrente conta = ListaDeContas.get(cpf);
+        if(conta.getSaldo() + conta.getLimite() < valor){
+            throw new RuntimeException("Saldo insuficiente!");
+        }
+        conta.saque(valor);
+    }
+
+
+    public Collection<Movimentacao> listaDeMovimentacao(String cpf){ return ListaDeContas.get(cpf).movimentacao(); }
 }

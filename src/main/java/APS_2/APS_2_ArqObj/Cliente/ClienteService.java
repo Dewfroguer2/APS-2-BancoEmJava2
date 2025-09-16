@@ -1,11 +1,8 @@
-package Cliente;
+package APS_2.APS_2_ArqObj.Cliente;
 
-import Autenticacao.Usuario;
-import ContaCorrente.ContaCorrente;
-import org.springframework.beans.factory.annotation.Autowired;
+import APS_2.APS_2_ArqObj.Autenticacao.Usuario;
 import org.springframework.stereotype.Service;
 
-import java.lang.ref.Cleaner;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

@@ -1,14 +1,14 @@
-package Cliente;
+package APS_2.APS_2_ArqObj.Cliente;
 
-import Autenticacao.Usuario;
-import Autenticacao.UsuarioService;
+import APS_2.APS_2_ArqObj.Autenticacao.Usuario;
+import APS_2.APS_2_ArqObj.Autenticacao.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
 @RestController
-@RequestMapping("/Cliente")
+@RequestMapping("/APS_2/APS_2_ArqObj/Cliente")
 public class ClienteController {
 
     @Autowired
@@ -34,7 +34,8 @@ public class ClienteController {
     }
 
     @PutMapping("/{cpf}")
-    public  Cliente atulizarCliente(@PathVariable String cpf, @RequestBody Cliente cliente) {
+    public  Cliente atulizarCliente(@PathVariable String cpf, @RequestBody Cliente cliente, @RequestHeader(name = "token") String token ) {
+        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
        return clienteService.editaCliente(cpf, cliente);
     }
 }

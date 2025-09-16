@@ -1,8 +1,8 @@
-package Cartao;
+package APS_2.APS_2_ArqObj.Cartao;
 
 
-import ContaCorrente.ContaCorrente;
-import ContaCorrente.ContaCorrenteService;
+import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrente;
+import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrenteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

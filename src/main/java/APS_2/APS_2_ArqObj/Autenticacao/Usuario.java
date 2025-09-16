@@ -1,4 +1,4 @@
-package Autenticacao;
+package APS_2.APS_2_ArqObj.Autenticacao;
 
 public class Usuario {
 
