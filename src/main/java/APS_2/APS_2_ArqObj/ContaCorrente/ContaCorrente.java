@@ -9,49 +9,50 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ContaCorrente {
-    private String Agencia;
-    private String Numero;
-    private  Float Saldo;
-    private  Float Limite;
+        private String agencia;
+        private String numero;
+        private Float saldo;
+        private Float limite;
 
-    @JsonIgnore
-    private Cliente Cliente;
-    private ArrayList<Cartao> Cartoes = new ArrayList<>();
-    private  ArrayList<Movimentacao> Movimentacoes = new ArrayList<>();
+        @JsonIgnore
+        private Cliente cliente;
+        private ArrayList<Cartao> cartoes = new ArrayList<>();
+        private final ArrayList<Movimentacao> movimentacoes = new ArrayList<>();
+
 
     public ContaCorrente(){}
 
     public ContaCorrente(String agencia, String numero, Float saldo, Float limite){
-        this.Agencia = agencia;
-        this.Numero = numero;
-        this.Saldo = saldo;
-        this.Limite = limite;
+        this.agencia = agencia;
+        this.numero = numero;
+        this.saldo = saldo;
+        this.limite = limite;
     }
 
-    public String getAgencia() { return Agencia; }
+    public String getAgencia() { return agencia; }
 
-    public void setAgencia(String agencia) { Agencia = agencia; }
+    public void setAgencia(String age) { agencia = age; }
 
-    public ArrayList<Cartao> getCartoes() { return Cartoes; }
+    public ArrayList<Cartao> getCartoes() { return cartoes; }
 
-    public void setCartoes(ArrayList<Cartao> cartoes) { Cartoes = cartoes; }
+    public void setCartoes(ArrayList<Cartao> cartoes) { this.cartoes = cartoes; }
 
-    public Float getLimite() { return Limite; }
+    public Float getLimite() { return limite; }
 
 
-    public String getNumero() { return Numero; }
+    public String getNumero() { return numero; }
 
-    public void setNumero(String numero) { Numero = numero; }
+    public void setNumero(String numero) { this.numero = numero; }
 
-    public Float getSaldo() { return Saldo; }
+    public Float getSaldo() { return saldo; }
 
-    public Cliente getCliente() { return Cliente; }
+    public Cliente getCliente() { return cliente; }
 
-    public void setCliente(Cliente cliente) { Cliente = cliente; }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
-    public void deposito(Integer valor){ Saldo += valor; Movimentacoes.add( new Movimentacao("Deposito", valor, LocalDate.now())); }
+    public void deposito(Integer valor){ saldo += valor; movimentacoes.add( new Movimentacao("Deposito", valor, LocalDate.now())); }
 
-    public void saque(Integer valor){ Saldo -= valor; Movimentacoes.add(new Movimentacao("Saque", valor, LocalDate.now()));}
+    public void saque(Integer valor){ saldo -= valor; movimentacoes.add(new Movimentacao("Saque", valor, LocalDate.now()));}
 
-    public Collection<Movimentacao> movimentacao(){ return Movimentacoes; }
+    public Collection<Movimentacao> movimentacao(){ return movimentacoes; }
 }

@@ -6,48 +6,47 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
 
 public class Cliente {
-
-    private String CPF;
-    private  String Nome;
-    private LocalDate DataNascimento;
-    private Float Salario;
+    private String cpf;
+    private String nome;
+    private LocalDate dataNascimento;
+    private Float salario;
     private String emailCriado;
 
     @JsonIgnore
-    private ContaCorrente Conta;
+    private ContaCorrente conta;
 
     public Cliente(){}
 
     public Cliente(String cpf, String nome, LocalDate dataNascimento, Float salario){
-        this.CPF = cpf;
-        this.Nome = nome;
-        this.DataNascimento = dataNascimento;
-        this.Salario = salario;
+        this.cpf = cpf;
+        this.nome = nome;
+        this.dataNascimento = dataNascimento;
+        this.salario = salario;
     }
 
     public String getEmailCriado() { return emailCriado; }
 
     public void setEmailCriado(String emailCriado) { this.emailCriado = emailCriado; }
 
-    public Float getSalario() { return Salario; }
+    public Float getSalario() { return salario; }
 
-    public void setSalario(Float salario) { Salario = salario; }
+    public void setSalario(Float salario) { this.salario = salario; }
 
-    public String getNome() { return Nome; }
+    public String getNome() { return nome; }
 
-    public void setNome(String nome) { Nome = nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public LocalDate getDataNascimento() { return DataNascimento; }
+    public LocalDate getDataNascimento() { return dataNascimento; }
 
-    public void setDataNascimento(LocalDate dataNascimento) { DataNascimento = dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
-    public String getCPF() { return CPF; }
+    public String getCPF() { return cpf; }
 
-    public void setCPF(String CPF) { this.CPF = CPF; }
+    public void setCPF(String CPF) { this.cpf = CPF; }
 
-    public ContaCorrente getConta() { return Conta; }
+    public ContaCorrente getConta() { return conta; }
 
-    public void setConta(ContaCorrente conta) { Conta = conta; }
+    public void setConta(ContaCorrente conta) { this.conta = conta; }
 
 
 
