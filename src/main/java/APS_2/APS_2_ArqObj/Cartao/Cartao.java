@@ -14,15 +14,15 @@ public class Cartao {
     private Integer id;
 
     @Column(nullable = false, name = "numero_cartao")
-    private String NumeroCartao;
+    private String numeroCartao;
 
     @Column(nullable = false)
-    private String Tipo;
+    private String tipo;
 
-    private String Status;
+    private String status;
 
     @Column(nullable = false)
-    private LocalDate Validade;
+    private LocalDate validade;
 
     @JsonIgnore
     @ManyToOne
@@ -32,23 +32,23 @@ public class Cartao {
     public Cartao(){}
 
     public Cartao(String numeroCartao, String tipo, String status, LocalDate validade){
-        this.NumeroCartao = numeroCartao;
-        this.Tipo = tipo;
-        this.Status = status;
-        this.Validade = validade;
+        this.numeroCartao = numeroCartao;
+        this.tipo = tipo;
+        this.status = status;
+        this.validade = validade;
     }
 
-    public String getNumeroCartao() { return NumeroCartao; }
-    public void setNumeroCartao(String numeroCartao) { NumeroCartao = numeroCartao; }
+    public String getNumeroCartao() { return numeroCartao; }
+    public void setNumeroCartao(String numeroCartao) { numeroCartao = numeroCartao; }
 
-    public String getStatus() { return Status; }
-    public void setStatus(String status) { Status = status; }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { status = status; }
 
-    public String getTipo() { return Tipo; }
-    public void setTipo(String tipo) { Tipo = tipo; }
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { tipo = tipo; }
 
-    public LocalDate getValidade() { return Validade; }
-    public void setValidade(LocalDate validade) { Validade = validade; }
+    public LocalDate getValidade() { return validade; }
+    public void setValidade(LocalDate validade) { validade = validade; }
 
     public ContaCorrente getContaCorrente() { return contaCorrente; }
     public void setContaCorrente(ContaCorrente contaCorrente) { this.contaCorrente = contaCorrente; }
