@@ -34,12 +34,10 @@ public class ContaCorrenteService {
             throw new RuntimeException("Cliente não encontrado para esse CPF: " + conta.getCliente().getCPF());
         }
 
-        // liga as entidades e persiste a conta
         conta.setCliente(cliente);
         cliente.setConta(conta);
 
         ContaCorrente salvo = contaCorrenteRepository.save(conta);
-        // como cascade está definido, cliente já ficará consistente se você persistir por cliente; aqui salvamos a conta.
         return salvo;
     }
 
@@ -56,7 +54,6 @@ public class ContaCorrenteService {
     }
 
     public ContaCorrente buscaConta(String cpf){
-        // mesmo comportamento que buscaContaPorCliente
         return buscaContaPorCliente(cpf);
     }
 
@@ -74,13 +71,9 @@ public class ContaCorrenteService {
         if (existente == null) {
             throw new RuntimeException("Conta não encontrada para o CPF: " + cpf);
         }
-        // atualiza campos permitidos (mantive apenas os campos existentes no seu modelo)
         if (contaAtualizada.getAgencia() != null) existente.setAgencia(contaAtualizada.getAgencia());
         if (contaAtualizada.getNumero() != null) existente.setNumero(contaAtualizada.getNumero());
         if (contaAtualizada.getSaldo() != null) {
-            // se quiser, em vez de set, poderia somar ou validar; mantive simples
-            // existente.setSaldo(contaAtualizada.getSaldo());
-            // se o seu fluxo quiser preservar movimentações, prefira métodos de negócio (deposito/saque)
             existente.setCliente(contaAtualizada.getCliente() != null ? contaAtualizada.getCliente() : existente.getCliente());
         }
         contaCorrenteRepository.save(existente);

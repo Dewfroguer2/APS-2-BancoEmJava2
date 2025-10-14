@@ -7,25 +7,31 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(name = "cartao")
 public class Cartao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "numero_cartao")
     private String NumeroCartao;
+
     @Column(nullable = false)
     private String Tipo;
+
     private String Status;
+
     @Column(nullable = false)
     private LocalDate Validade;
 
     @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "conta_id")
     private ContaCorrente contaCorrente;
 
     public Cartao(){}
 
-    public void Cartao(String numeroCartao, String tipo, String status, LocalDate validade){
+    public Cartao(String numeroCartao, String tipo, String status, LocalDate validade){
         this.NumeroCartao = numeroCartao;
         this.Tipo = tipo;
         this.Status = status;
@@ -33,22 +39,17 @@ public class Cartao {
     }
 
     public String getNumeroCartao() { return NumeroCartao; }
-
     public void setNumeroCartao(String numeroCartao) { NumeroCartao = numeroCartao; }
 
     public String getStatus() { return Status; }
-
     public void setStatus(String status) { Status = status; }
 
     public String getTipo() { return Tipo; }
-
     public void setTipo(String tipo) { Tipo = tipo; }
 
     public LocalDate getValidade() { return Validade; }
-
     public void setValidade(LocalDate validade) { Validade = validade; }
 
     public ContaCorrente getContaCorrente() { return contaCorrente; }
-
     public void setContaCorrente(ContaCorrente contaCorrente) { this.contaCorrente = contaCorrente; }
 }

@@ -1,47 +1,68 @@
 package APS_2.APS_2_ArqObj.Autenticacao;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
+
 
 @Service
 public class UsuarioService {
 
-    private HashMap<String, Usuario> usuarios = new HashMap<>();
-    private HashMap<String, Usuario> tokens = new HashMap<>();
+    // tokens temporários em memória (token -> Usuario)
+    private final Map<String, Usuario> tokens = new HashMap<>();
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Transactional
     public Usuario cadastrarUsuario(Usuario usuario){
-        String passoword = usuario.getPassowrd();
+        if (usuario == null || usuario.getEmail() == null || usuario.getPassowrd() == null) {
+            throw new RuntimeException("Dados inválidos para cadastro");
+        }
 
-        usuario.setPassowrd(BCrypt.hashpw(passoword, BCrypt.gensalt()));
-        usuarios.put(usuario.getEmail(),usuario);
-        return usuario;
+        // hash da senha antes de salvar
+        String raw = usuario.getPassowrd();
+        String hashed = BCrypt.hashpw(raw, BCrypt.gensalt());
+        usuario.setPassowrd(hashed);
 
+        return usuarioRepository.save(usuario);
     }
 
     public Collection<Usuario> listaUsuarios(){
-        return usuarios.values();
+        return usuarioRepository.findAll();
     }
 
     public String login(Usuario usuario){
-        Usuario user = usuarios.get(usuario.getEmail());
-        if (BCrypt.checkpw(usuario.getPassowrd(), user.getPassowrd())) {
+        if (usuario == null || usuario.getEmail() == null || usuario.getPassowrd() == null) {
+            throw new RuntimeException("Dados de login inválidos");
+        }
+
+        Optional<Usuario> opt = usuarioRepository.findById(usuario.getEmail());
+        if (opt.isEmpty()) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        Usuario stored = opt.get();
+        if (BCrypt.checkpw(usuario.getPassowrd(), stored.getPassowrd())) {
             String token = UUID.randomUUID().toString();
-            tokens.put(token, usuario);
+            tokens.put(token, stored);
             return token;
         }
-        throw new RuntimeException("Usuário não encontrado");
+
+        throw new RuntimeException("Credenciais inválidas");
     }
 
     public Usuario validarToken(String token) {
         Usuario usuario = tokens.get(token);
-
         if (usuario == null) {
-            throw new RuntimeException(("Token invalido"));
+            throw new RuntimeException("Token invalido");
         }
-
         return usuario;
+    }
+
+    public void invalidateToken(String token) {
+        tokens.remove(token);
     }
 }

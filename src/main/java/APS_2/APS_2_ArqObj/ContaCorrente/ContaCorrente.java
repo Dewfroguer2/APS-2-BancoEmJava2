@@ -24,28 +24,24 @@ public class ContaCorrente {
     @Column(nullable = false)
     private String numero;
 
-    // Para Float não use scale na annotation (aplica-se a numeric/decimal). Mantive Float conforme seu código.
     @Column
     private Float saldo;
 
     @Column
     private Float limite;
 
-    // Cliente — relação direta com JoinColumn (proprietário)
     @OneToOne
     @JoinColumn(name = "cliente_id", unique = true)
     private Cliente cliente;
 
-    // Cartões — mapeado por campo "contaCorrente" na entidade Cartao (presumi esse nome de campo).
-    // Se o nome do campo em Cartao for diferente, altere mappedBy conforme a entidade Cartao que você vai mandar.
     @OneToMany(mappedBy = "contaCorrente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cartao> cartoes = new ArrayList<>();
 
-    // Movimentações — mapeado por campo "contaCorrente" na entidade Movimentacao (se for outro nome, ajuste)
-    @OneToMany(mappedBy = "contaCorrente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ElementCollection
+    @CollectionTable(name = "movimentacao", joinColumns = @JoinColumn(name = "conta_id"))
     private List<Movimentacao> movimentacoes = new ArrayList<>();
 
-    // getters / setters (mantive apenas os que você já tinha)
+
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
 
@@ -65,18 +61,18 @@ public class ContaCorrente {
     public Cliente getCliente() { return cliente; }
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
-    // operações que alteram saldo e geram movimentação
     public void deposito(Integer valor){
         if (this.saldo == null) this.saldo = 0f;
         this.saldo += valor;
-        this.movimentacoes.add(new Movimentacao("Deposito", valor, LocalDate.now(), this));
+        this.movimentacoes.add(new Movimentacao("Deposito", valor, LocalDate.now()));
     }
 
     public void saque(Integer valor){
         if (this.saldo == null) this.saldo = 0f;
         this.saldo -= valor;
-        this.movimentacoes.add(new Movimentacao("Saque", valor, LocalDate.now(), this));
+        this.movimentacoes.add(new Movimentacao("Saque", valor, LocalDate.now()));
     }
 
-    public Collection<Movimentacao> movimentacao(){ return movimentacoes; }
+
+    public java.util.Collection<Movimentacao> movimentacao(){ return movimentacoes; }
 }
