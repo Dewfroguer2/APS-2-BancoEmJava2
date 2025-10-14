@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/Cliente")
@@ -18,24 +19,24 @@ public class ClienteController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public Collection<Cliente> listaCliente(){
-        return clienteService.listaClientes();
+    public List<Cliente> listaCliente(@RequestParam(name = "nome", required = false) String nome){
+        return clienteService.listaClientes(nome);
     }
 
-    @GetMapping("/{cpf}")
-    public Cliente buscaPorCpf(@PathVariable String cpf) {
-        return clienteService.buscaPorCpf(cpf);
+    @GetMapping("/{id}")
+    public Cliente buscaPorCpf(@PathVariable Integer id) {
+        return clienteService.buscaPorId(id);
     }
 
     @PostMapping
     public Cliente cadastraCliente(@RequestHeader(name = "token") String token, @RequestBody Cliente cliente) {
-        Usuario usuario = usuarioService.validarToken(token);
-        return clienteService.cadastrarCliente(cliente, usuario);
+        usuarioService.validarToken(token);
+        return clienteService.salvar(cliente);
     }
 
     @PutMapping("/{cpf}")
-    public  Cliente atulizarCliente(@PathVariable String cpf, @RequestBody Cliente cliente, @RequestHeader(name = "token") String token ) {
+    public  Cliente atulizarCliente(@PathVariable Integer id, @RequestBody Cliente cliente, @RequestHeader(name = "token") String token ) {
         usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
-       return clienteService.editaCliente(cpf, cliente);
+       return clienteService.atualizar(id, cliente);
     }
 }

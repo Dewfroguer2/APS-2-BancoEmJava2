@@ -2,13 +2,22 @@ package APS_2.APS_2_ArqObj.Cartao;
 
 import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@Entity
 public class Cartao {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
     private String NumeroCartao;
+    @Column(nullable = false)
     private String Tipo;
     private String Status;
+    @Column(nullable = false)
     private LocalDate Validade;
 
     @JsonIgnore

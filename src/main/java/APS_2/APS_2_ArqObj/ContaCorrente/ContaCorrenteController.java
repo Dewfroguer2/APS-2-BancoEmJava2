@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/ContaCorrente")
@@ -17,39 +19,40 @@ public class ContaCorrenteController {
     private ContaCorrenteService contaCorrenteService;
 
     @GetMapping
-    public Collection<contaDTO> listConta(){ return contaCorrenteService.listaConta(); }
+    public List<ContaCorrente> listConta(){ return contaCorrenteService.listaConta(); }
 
     @GetMapping("/{cpf}")
-    public contaDTO getConta(@PathVariable String cpf){
+    public ContaCorrente getConta(@PathVariable String cpf){
         return contaCorrenteService.buscaContaPorCliente(cpf);
     }
 
     @PostMapping
     public void postConta(@RequestBody ContaCorrente conta, @RequestHeader(name = "token") String token ){
-        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
-        contaCorrenteService.cadastraConta(conta); }
+        usuarioService.validarToken(token);
+        contaCorrenteService.cadastraConta(conta);
+    }
 
     @PutMapping("/{cpf}")
     public void putConta(@PathVariable String cpf, @RequestBody ContaCorrente contaCorrente, @RequestHeader(name = "token") String token ){
-        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
+        usuarioService.validarToken(token);
         contaCorrenteService.atualizaConta(cpf, contaCorrente);
     }
 
     @DeleteMapping("/{cpf}")
     public void deletConta(@PathVariable String cpf, @RequestHeader(name = "token") String token ) {
-        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
+        usuarioService.validarToken(token);
         contaCorrenteService.excluiConta(cpf );
     }
 
     @PutMapping("/{cpf}/Deposito")
     public void deposito(@PathVariable String cpf, @RequestBody Integer valor,  @RequestHeader(name = "token") String token ){
-        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
+        usuarioService.validarToken(token);
         contaCorrenteService.deposito(valor, cpf);
     }
 
     @PutMapping("/{cpf}/Saque")
     public void saque(@PathVariable String cpf, @RequestBody Integer valor, @RequestHeader(name = "token") String token ){
-        usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
+        usuarioService.validarToken(token);
         contaCorrenteService.saque(valor, cpf);
     }
 

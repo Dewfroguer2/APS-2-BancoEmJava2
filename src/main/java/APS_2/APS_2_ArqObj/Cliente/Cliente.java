@@ -2,27 +2,32 @@ package APS_2.APS_2_ArqObj.Cliente;
 
 import APS_2.APS_2_ArqObj.ContaCorrente.ContaCorrente;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class Cliente {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false, unique = true)
     private String cpf;
+    @Column(nullable = false)
     private String nome;
+
     private LocalDate dataNascimento;
     private Float salario;
     private String emailCriado;
 
     @JsonIgnore
+    @OneToOne(mappedBy = "cliente")
     private ContaCorrente conta;
 
-    public Cliente(){}
+    public Integer getId(){ return id;}
 
-    public Cliente(String cpf, String nome, LocalDate dataNascimento, Float salario){
-        this.cpf = cpf;
-        this.nome = nome;
-        this.dataNascimento = dataNascimento;
-        this.salario = salario;
-    }
+    public void setId(Integer id){ this.id = id;}
 
     public String getEmailCriado() { return emailCriado; }
 
