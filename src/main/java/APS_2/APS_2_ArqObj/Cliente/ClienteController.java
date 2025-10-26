@@ -2,12 +2,15 @@ package APS_2.APS_2_ArqObj.Cliente;
 
 import APS_2.APS_2_ArqObj.Autenticacao.Usuario;
 import APS_2.APS_2_ArqObj.Autenticacao.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
 
+@Tag(name = "Cliente", description = "Operações sobre clientes")
 @RestController
 @RequestMapping("/Cliente")
 public class ClienteController {
@@ -18,6 +21,7 @@ public class ClienteController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Operation(summary = "Listar clientes", description = "Retorna a lista de clientes em formato DTO")
     @GetMapping
     public List<ClienteDTO> listaCliente(@RequestParam(name = "nome", required = false) String nome){
         List<Cliente> clientes = clienteService.listaClientes(nome);
@@ -30,6 +34,7 @@ public class ClienteController {
         return clientesDto;
     }
 
+    @Operation(summary = "Buscar cliente por id", description = "Retorna um cliente (DTO) pelo id")
     @GetMapping("/{id}")
     public ClienteDTO buscaPorCpf(@PathVariable Integer id) {
         Cliente cliente = clienteService.buscaPorId(id);
@@ -43,6 +48,7 @@ public class ClienteController {
         return clienteDto;
     }
 
+    @Operation(summary = "Criar cliente", description = "Cria um cliente a partir do ClienteDTO")
     @PostMapping
     public ClienteDTO cadastraCliente(@RequestHeader(name = "token") String token, @RequestBody ClienteDTO clienteDTO) {
         usuarioService.validarToken(token);
@@ -55,6 +61,7 @@ public class ClienteController {
         return clienteDTO;
     }
 
+    @Operation(summary = "Atualizar cliente", description = "Atualiza um cliente pelo id com os dados do DTO")
     @PutMapping("/{cpf}")
     public  ClienteDTO atulizarCliente(@PathVariable Integer id, @RequestBody ClienteDTO clienteDto, @RequestHeader(name = "token") String token ) {
         usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
