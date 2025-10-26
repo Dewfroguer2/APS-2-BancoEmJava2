@@ -23,26 +23,38 @@ public class ContaCorrenteService {
     private ContaCorrenteRepository contaCorrenteRepository;
 
     @Transactional
-    public ContaCorrente cadastraConta(ContaCorrente conta){
-        if (conta == null || conta.getCliente() == null || conta.getCliente().getCPF() == null) {
+    public ContaCorrente cadastraConta(ContaCorrenteDTO dto){
+        if (dto == null || dto.clienteCpf() == null) {
             throw new RuntimeException("Conta ou Cliente inválido para cadastro.");
         }
 
         // busca cliente existente por CPF
-        Cliente cliente = clienteRepository.findByCpf(conta.getCliente().getCPF());
+        Cliente cliente = clienteRepository.findByCpf(dto.clienteCpf());
         if (cliente == null) {
             throw new RuntimeException("Cliente não encontrado para esse CPF: " + conta.getCliente().getCPF());
         }
 
+        ContaCorrente conta = new ContaCorrente();
+        conta.setAgencia(dto.agencia());
+        conta.setNumero(dto.numero());
         conta.setCliente(cliente);
         cliente.setConta(conta);
 
-        ContaCorrente salvo = contaCorrenteRepository.save(conta);
-        return salvo;
+
+        return contaCorrenteRepository.save(conta);
     }
 
-    public List<ContaCorrente> listaConta(){
-        return contaCorrenteRepository.findAll();
+    public List<ContaCorrenteDTO> listaConta(){
+        return contaCorrenteRepository.findAll()
+                .stream()
+                .map(c -> new ContaCorrenteDTO(
+                        c.getAgencia(),
+                        c.getNumero(),
+                        c.getSaldo(),
+                        c.getLimite(),
+                        c.getCliente().getCPF()
+                ))
+                .toList();
     }
 
     public ContaCorrente buscaContaPorCliente(String cpf){
@@ -66,16 +78,14 @@ public class ContaCorrenteService {
     }
 
     @Transactional
-    public void atualizaConta(String cpf, ContaCorrente contaAtualizada){
+    public void atualizaConta(String cpf, ContaCorrenteDTO dto){
         ContaCorrente existente = contaCorrenteRepository.findByCliente_Cpf(cpf);
         if (existente == null) {
             throw new RuntimeException("Conta não encontrada para o CPF: " + cpf);
         }
-        if (contaAtualizada.getAgencia() != null) existente.setAgencia(contaAtualizada.getAgencia());
-        if (contaAtualizada.getNumero() != null) existente.setNumero(contaAtualizada.getNumero());
-        if (contaAtualizada.getSaldo() != null) {
-            existente.setCliente(contaAtualizada.getCliente() != null ? contaAtualizada.getCliente() : existente.getCliente());
-        }
+        if (dto.agencia() != null) existente.setAgencia(dto.agencia());
+        if (dto.numero() != null) existente.setNumero(dto.numero());
+
         contaCorrenteRepository.save(existente);
     }
 

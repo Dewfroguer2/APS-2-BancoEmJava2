@@ -19,24 +19,46 @@ public class ClienteController {
     private UsuarioService usuarioService;
 
     @GetMapping
-    public List<Cliente> listaCliente(@RequestParam(name = "nome", required = false) String nome){
-        return clienteService.listaClientes(nome);
+    public List<ClienteDTO> listaCliente(@RequestParam(name = "nome", required = false) String nome){
+        List<Cliente> clientes = clienteService.listaClientes(nome);
+
+        // converte entidades para DTOs
+        List<ClienteDTO> clientesDto = clientes.stream()
+                .map(c -> new ClienteDTO(c.getNome(), c.getCPF(), c.getDataNascimento()))
+                .toList();
+
+        return clientesDto;
     }
 
     @GetMapping("/{id}")
-    public Cliente buscaPorCpf(@PathVariable Integer id) {
-        return clienteService.buscaPorId(id);
+    public ClienteDTO buscaPorCpf(@PathVariable Integer id) {
+        Cliente cliente = clienteService.buscaPorId(id);
+
+        ClienteDTO clienteDto = new ClienteDTO(
+                cliente.getNome(),
+                cliente.getCPF(),
+                cliente.getDataNascimento()
+        );
+
+        return clienteDto;
     }
 
     @PostMapping
-    public Cliente cadastraCliente(@RequestHeader(name = "token") String token, @RequestBody Cliente cliente) {
+    public ClienteDTO cadastraCliente(@RequestHeader(name = "token") String token, @RequestBody ClienteDTO clienteDTO) {
         usuarioService.validarToken(token);
-        return clienteService.salvar(cliente);
+        Cliente cliente = new Cliente();
+        cliente.setCPF(clienteDTO.cpf());
+        cliente.setNome(clienteDTO.name());
+        cliente.setDataNascimento(clienteDTO.date());
+        clienteService.salvar(cliente);
+
+        return clienteDTO;
     }
 
     @PutMapping("/{cpf}")
-    public  Cliente atulizarCliente(@PathVariable Integer id, @RequestBody Cliente cliente, @RequestHeader(name = "token") String token ) {
+    public  ClienteDTO atulizarCliente(@PathVariable Integer id, @RequestBody ClienteDTO clienteDto, @RequestHeader(name = "token") String token ) {
         usuarioService.validarToken(token); // Válida se o usuário possui um token para poder continuar
-       return clienteService.atualizar(id, cliente);
+        Cliente atualizado = clienteService.atualizar(id, clienteDto);
+        return clienteDto;
     }
 }

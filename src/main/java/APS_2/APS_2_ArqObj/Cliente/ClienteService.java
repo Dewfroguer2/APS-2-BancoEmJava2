@@ -31,18 +31,27 @@ public class ClienteService {
         return clienteRepository.save(cliente);
     }
 
-    public Cliente atualizar(Integer id, Cliente clienteAtualizado){
+
+    public Cliente atualizar(Integer id, ClienteDTO clienteAtualizado) {
         Cliente cliente = buscaPorId(id);
-        if (cliente != null){
-            cliente.setNome(clienteAtualizado.getNome());
+
+        if (cliente == null) {
+            throw new RuntimeException("Cliente não encontrado com id: " + id);
         }
 
-        if (cliente != null){
-            cliente.setSalario(clienteAtualizado.getSalario());
+        if (clienteAtualizado.name() != null) {
+            cliente.setNome(clienteAtualizado.name());
         }
-        if (cliente != null){
-            cliente.setDataNascimento((clienteAtualizado.getDataNascimento()));
+        if (clienteAtualizado.date() != null) {
+            cliente.setDataNascimento(clienteAtualizado.date());
         }
+        // o CPF geralmente não se altera, mas se quiser permitir:
+        if (clienteAtualizado.cpf() != null) {
+            cliente.setCPF(clienteAtualizado.cpf());
+        }
+
         return clienteRepository.save(cliente);
+    }
+
     }
 }

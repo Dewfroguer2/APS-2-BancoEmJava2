@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Service
 public class CartaoService {
-
     @Autowired
     private CartaoRepository cartaoRepository;
 
@@ -23,44 +22,46 @@ public class CartaoService {
     private ContaCorrenteService contaCorrenteService;
 
     @Transactional
-    public Cartao criaCartao(Cartao cartao){
-        if (cartao == null || cartao.getContaCorrente() == null || cartao.getContaCorrente().getCliente() == null) {
+    public Cartao criaCartaoDTO(CartaoDTO dto) {
+        if (dto == null || dto.clienteCPF() == null) {
             throw new RuntimeException("Dados do cartão inválidos.");
         }
 
-        String cpf = cartao.getContaCorrente().getCliente().getCPF();
-        ContaCorrente conta = contaCorrenteService.buscaConta(cpf);
+        ContaCorrente conta = contaCorrenteService.buscaConta(dto.clienteCPF());
         if (conta == null) {
-            throw new RuntimeException("Conta não encontrada para o CPF: " + cpf);
+            throw new RuntimeException("Conta não encontrada para o CPF: " + dto.clienteCPF());
         }
 
+        Cartao cartao = new Cartao();
+        cartao.setNumeroCartao(dto.numerCartao());
+        cartao.setTipo(dto.tipo());
+        cartao.setStatus(dto.status());
+        cartao.setValidade(dto.validade());
         cartao.setContaCorrente(conta);
-        Cartao salvo = cartaoRepository.save(cartao);
-        return salvo;
+
+        return cartaoRepository.save(cartao);
     }
 
-    public Cartao getCartao(String numeroCartao){
+    public List<Cartao> listaDeCartao() {
+        return cartaoRepository.findAll();
+    }
+
+    public Cartao getCartao(String numeroCartao) {
         return cartaoRepository.findByNumeroCartao(numeroCartao);
     }
 
-    public Collection<Cartao> listaDeCartao(){
-        List<Cartao> all = cartaoRepository.findAll();
-        return all;
-    }
-
     @Transactional
-    public Cartao cancelamentoCartao(String numero){
+    public Cartao cancelamentoCartao(String numero) {
         Cartao cartao = cartaoRepository.findByNumeroCartao(numero);
-        if (cartao == null){
-            throw new RuntimeException("Cartão não encontrado, informe um número válido");
+        if (cartao == null) {
+            throw new RuntimeException("Cartão não encontrado.");
         }
         cartao.setStatus("Cancelado");
         return cartaoRepository.save(cartao);
     }
 
-    public String status(String num){
+    public String status(String num) {
         Cartao c = cartaoRepository.findByNumeroCartao(num);
         if (c == null) throw new RuntimeException("Cartão não encontrado");
         return c.getStatus();
-    }
-}
+    }}

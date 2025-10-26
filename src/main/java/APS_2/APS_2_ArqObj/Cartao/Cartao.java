@@ -24,7 +24,7 @@ public class Cartao {
     @Column(nullable = false)
     private LocalDate validade;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "conta_id")
     private ContaCorrente contaCorrente;

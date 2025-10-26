@@ -2,6 +2,8 @@ package APS_2.APS_2_ArqObj.ContaCorrente;
 
 import APS_2.APS_2_ArqObj.Autenticacao.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -19,41 +21,64 @@ public class ContaCorrenteController {
     private ContaCorrenteService contaCorrenteService;
 
     @GetMapping
-    public List<ContaCorrente> listConta(){ return contaCorrenteService.listaConta(); }
+    public ResponseEntity<List<ContaCorrenteDTO>> listConta(){
+        List<ContaCorrenteDTO> contas = contaCorrenteService.listaConta();
+        return ResponseEntity.ok(contas); }
 
     @GetMapping("/{cpf}")
-    public ContaCorrente getConta(@PathVariable String cpf){
-        return contaCorrenteService.buscaContaPorCliente(cpf);
+    public ResponseEntity<ContaCorrenteDTO> buscarContaPorCliente(@PathVariable String cpf) {
+        var conta = contaCorrenteService.buscaContaPorCliente(cpf);
+        ContaCorrenteDTO dto = new ContaCorrenteDTO(
+                conta.getAgencia(),
+                conta.getNumero(),
+                conta.getSaldo(),
+                conta.getLimite(),
+                conta.getCliente().getCPF()
+        );
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public void postConta(@RequestBody ContaCorrente conta, @RequestHeader(name = "token") String token ){
+    @Transactional
+    public ResponseEntity<ContaCorrenteDTO> postConta(@RequestBody ContaCorrenteDTO dto, @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token);
-        contaCorrenteService.cadastraConta(conta);
+        var conta = contaCorrenteService.cadastraConta(dto);
+        ContaCorrenteDTO resposta = new ContaCorrenteDTO(
+                conta.getAgencia(),
+                conta.getNumero(),
+                conta.getSaldo(),
+                conta.getLimite(),
+                conta.getCliente().getCPF()
+        );
+        return ResponseEntity.ok(resposta);
     }
 
     @PutMapping("/{cpf}")
-    public void putConta(@PathVariable String cpf, @RequestBody ContaCorrente contaCorrente, @RequestHeader(name = "token") String token ){
+    public ResponseEntity<String> putConta(@PathVariable String cpf, @RequestBody ContaCorrenteDTO dto, @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token);
-        contaCorrenteService.atualizaConta(cpf, contaCorrente);
+        contaCorrenteService.atualizaConta(cpf, dto);
+        return ResponseEntity.ok("Conta atualizada com sucesso!");
     }
 
     @DeleteMapping("/{cpf}")
-    public void deletConta(@PathVariable String cpf, @RequestHeader(name = "token") String token ) {
+    public ResponseEntity<String> deletConta(@PathVariable String cpf, @RequestHeader(name = "token") String token ) {
         usuarioService.validarToken(token);
         contaCorrenteService.excluiConta(cpf );
+        return ResponseEntity.ok("Conta excluída com sucesso!");
     }
 
     @PutMapping("/{cpf}/Deposito")
-    public void deposito(@PathVariable String cpf, @RequestBody Integer valor,  @RequestHeader(name = "token") String token ){
+    public ResponseEntity<String> deposito(@PathVariable String cpf, @RequestBody Integer valor,  @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token);
         contaCorrenteService.deposito(valor, cpf);
+        return ResponseEntity.ok("Depósito realizado");
     }
 
     @PutMapping("/{cpf}/Saque")
-    public void saque(@PathVariable String cpf, @RequestBody Integer valor, @RequestHeader(name = "token") String token ){
+    public ResponseEntity<String> saque(@PathVariable String cpf, @RequestBody Integer valor, @RequestHeader(name = "token") String token ){
         usuarioService.validarToken(token);
         contaCorrenteService.saque(valor, cpf);
+        return ResponseEntity.ok("Depósito realizado");
     }
 
     @GetMapping("/{cpf}/Movimentacao")
