@@ -31,7 +31,7 @@ public class ContaCorrenteService {
         // busca cliente existente por CPF
         Cliente cliente = clienteRepository.findByCpf(dto.clienteCpf());
         if (cliente == null) {
-            throw new RuntimeException("Cliente não encontrado para esse CPF: " + conta.getCliente().getCPF());
+            throw new RuntimeException("Cliente não encontrado para esse CPF: " + dto.clienteCpf());
         }
 
         ContaCorrente conta = new ContaCorrente();
